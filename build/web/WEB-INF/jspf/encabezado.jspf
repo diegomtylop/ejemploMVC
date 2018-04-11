@@ -1,0 +1,6 @@
+<header class="bg-success p-2">
+    <div class="container">
+        <h1 class="text-white">Cuestionario App</h1>
+        <p class="text-light">Ejemplo MVC</p>
+    </div>
+</header>

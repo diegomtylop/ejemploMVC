@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!-- was: <?xml version="1.0" encoding="UTF-8"?> -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+   <!--MAPEO POR NOMBRE DE CLASE CONTROLADORA-->
+    <!--
+    https://www.mkyong.com/spring-mvc/spring-mvc-controllerclassnamehandlermapping-example/
+    Toma el nombre de la clase, quita el sufijo "controlador" si existe y retorna el texto que queda en minúscula y con un "/" al principio
+    por ejemplo:
+    "/holamvc" -> "HolaMVCController"
+    -->
+    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+    
+    
+    <!--MAPEO ESPECIFICANDO EXPLÍCITAMENTE LAS URL'S-->
+    <!--
+    Most controllers will use the ControllerClassNameHandlerMapping above, but
+    for the index controller we are using ParameterizableViewController, so we must
+    define an explicit mapping for it.
+    -->
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="index">indexController</prop>
+                <prop key="interno">internoController</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!--
+    The index controller.
+    -->
+    <bean name="indexController"
+          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+          p:viewName="index" />
+
+    <bean name="internoController"
+          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+          p:viewName="interno" />
+    
+    
+    <!--MAPEO ESPECIFICANDO EXPLICTAMENTE LAS URLS POR NOMBRE DE BEAN-->
+    <!--Ejemplo de mykong-->
+    <!--
+    MAPEA DIRECTAMENTE LA URL CON EL NOMBRE DEL BEAN DEFINIDO. Este es el mappeador por defecto si no se especifica ningún otro
+    http://www.mkyong.com/spring-mvc/spring-mvc-beannameurlhandlermapping-example/
+    -->
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+    
+    <bean name="/bienvenida.html" 
+		class="controladores.HolaMVCController"/>
+    <!--NOTA: Si se accee a "holamvc" también se mapea al controlador-->
+    
+    <!--Si descomento este bean, no ejecuta la aplicación porque se tiene activo el Bean "ControllerClassNameHandlerMapping"-->
+    <!--<bean name="/entrada.htm" 
+		class="controladores.HolaMVCController"/>-->
+
+    <!--Indica el mecanismo por medio del cual se hará la resolución de las vistas a desplegar-->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/jsp/"
+          p:suffix=".jsp" />
+    
+    <!--TAMBIÉN SE PUEDE ESPECIFICAR LA RUTA DIRECTAMENTE EN EL CONTROLADOR, VER ARCHIVO "applcationContext"-->
+    
+</beans>
